@@ -27,8 +27,16 @@ SECRET_KEY = "django-insecure-1z0jguk7%pr_cd!os^%@c9xsd&4vnm*db8l#rge(@urc%_ki^6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'avanti.konnektomdev.com',
+    'www.avanti.konnektomdev.com',
+    '164.92.227.242',
+    'localhost',
+    '127.0.0.1',
+    '.konnektomdev.com',  # Tüm subdomain'leri kabul et
+    'konnektomdev.com',   # Ana domain
+    '*',  # Geçici olarak tüm host'lari kabul et
+]
 
 # Application definition
 

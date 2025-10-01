@@ -6,37 +6,24 @@ from .settings import *
 import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Add your domain name here
-ALLOWED_HOSTS = [
-    'your-domain.com',
-    'www.your-domain.com',
-    'your-server-ip',
-    'localhost',
-    '127.0.0.1',
-]
+ALLOWED_HOSTS = ['*']
+
 
 # Database for Production (PostgreSQL recommended)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'avanti_db'),
-        'USER': os.environ.get('DB_USER', 'avanti_user'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'your_password'),
-        'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': 'avanti_db',
+        'USER': 'avanti_user',
+        'PASSWORD': 'Avanti2023',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
-# Alternative: Keep SQLite for simple deployment
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
