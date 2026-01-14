@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "About Us" %} - AVANTI GLOBAL SRL{% endblock %}
+
+{% block content %}
+<!-- Page Header Start -->
+<div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s" {% if hero_image %}style="background: linear-gradient(rgba(29, 42, 77, .8), rgba(29, 42, 77, .8)), url('{{ hero_image.url }}') center center no-repeat; background-size: cover;"{% else %}style="background: linear-gradient(rgba(29, 42, 77, .8), rgba(29, 42, 77, .8)), url({% static 'img/hero.jpg' %}) center center no-repeat; background-size: cover;"{% endif %}>
+    <div class="container py-5">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">{% trans "About Us" %}</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb text-uppercase">
+                <li class="breadcrumb-item"><a class="text-white" href="{% url 'home:index' %}">{% trans "Home" %}</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">{% trans "About" %}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- About Start -->
+{% for story in stories %}
+{% if story.is_active %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row gx-5">
+            <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
+                <div class="position-relative h-100">
+                    {% if story.image %}
+                    <img class="position-absolute w-100 h-100 rounded" src="{{ story.image.url }}" style="object-fit: cover;">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="mb-4">
+                    <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">{% trans "About Us" %}</h5>
+                    <h1 class="display-4">{{ story.name }}</h1>
+                </div>
+                <p>{{ story.description }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+<!-- About End -->
+
+<!-- Our Approach Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="text-center mx-auto mb-5" style="max-width: 500px;">
+            <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">{% trans "Our Approach" %}</h5>
+        </div>
+        <div class="row g-5">
+            {% for approach in approaches %}
+            {% if approach.is_active %}
+            <div class="col-lg-4 col-md-6">
+                <div class="bg-light rounded overflow-hidden">
+                    {% if approach.image %}
+                    <div style="width: 100%; height: 250px;">
+                        <img src="{{ approach.image.url }}" alt="{{ approach.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                    <div class="p-4 text-center">
+                        <h4 class="mb-3">{{ approach.name }}</h4>
+                        <p class="m-0">{{ approach.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Our Approach End -->
+
+<!-- Why Choose Us Start -->
+<div class="container-fluid py-5 bg-light">
+    <div class="container">
+        <div class="text-center mx-auto mb-5" style="max-width: 500px;">
+            <h5 class="d-inline-block text-primary text-uppercase border-bottom border-5">{% trans "Why Choose Us" %}</h5>
+        </div>
+        <div class="owl-carousel why-choose-carousel">
+            {% for item in why_choose_items %}
+            {% if item.is_active %}
+            <div class="bg-white rounded text-center p-5">
+                {% if item.image %}
+                <div class="mb-4">
+                    <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;">
+                </div>
+                {% endif %}
+                <h4 class="mb-3">{{ item.title }}</h4>
+                <p class="m-0">{{ item.description }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Why Choose Us End -->
+
+{% endblock %}

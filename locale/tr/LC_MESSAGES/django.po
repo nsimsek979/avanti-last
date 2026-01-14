@@ -1,0 +1,139 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-15 01:49+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\about\templates\about\about.html:5 .\about\templates\about\about.html:11
+#: .\about\templates\about\about.html:37 .\templates\home\index.html:47
+msgid "About Us"
+msgstr "Hakkımızda"
+
+#: .\about\templates\about\about.html:14
+#: .\products\templates\products\product_list.html:14
+#: .\services\templates\services\service_list.html:14 .\templates\base.html:55
+#: .\templates\base.html:119
+msgid "Home"
+msgstr "Ana Sayfa"
+
+#: .\about\templates\about\about.html:15 .\templates\base.html:64
+#: .\templates\base.html:122
+msgid "About"
+msgstr "Hakkımızda"
+
+#: .\about\templates\about\about.html:53
+msgid "Our Approach"
+msgstr "Yaklaşımımız"
+
+#: .\about\templates\about\about.html:82 .\templates\home\index.html:86
+msgid "Why Choose Us"
+msgstr "Neden Bizi Seçmelisiniz"
+
+#: .\avanti\settings.py:126
+msgid "English"
+msgstr "İngilizce"
+
+#: .\avanti\settings.py:127
+msgid "Romanian"
+msgstr "Rumence"
+
+#: .\avanti\settings.py:128
+msgid "Turkish"
+msgstr "Türkçe"
+
+#: .\contact\templates\contact\contact.html:5 .\templates\base.html:67
+#: .\templates\base.html:123
+msgid "Contact Us"
+msgstr "İletişim"
+
+#: .\contact\templates\contact\contact.html:12
+msgid "Any Questions?"
+msgstr "Sorularınız mı Var?"
+
+#: .\contact\templates\contact\contact.html:13
+msgid "Please Feel Free To Contact Us"
+msgstr "Bizimle İletişime Geçmekten Çekinmeyin"
+
+#: .\contact\templates\contact\contact.html:121
+msgid "Send Message"
+msgstr "Mesaj Gönder"
+
+#: .\products\templates\products\product_list.html:5
+#: .\products\templates\products\product_list.html:11
+msgid "Our Products"
+msgstr "Ürünlerimiz"
+
+#: .\products\templates\products\product_list.html:15
+msgid "Products"
+msgstr "Ürünler"
+
+#: .\services\templates\services\service_list.html:5
+#: .\services\templates\services\service_list.html:11
+msgid "Our Services"
+msgstr "Hizmetlerimiz"
+
+#: .\services\templates\services\service_list.html:15 .\templates\base.html:58
+#: .\templates\base.html:120 .\templates\home\index.html:112
+msgid "Services"
+msgstr "Hizmetler"
+
+#: .\services\templates\services\service_list.html:49
+msgid "Services:"
+msgstr "Hizmetler:"
+
+#: .\templates\base.html:61 .\templates\base.html:121
+msgid "Product List"
+msgstr "Ürün Listesi"
+
+#: .\templates\base.html:99
+msgid "OFFICE"
+msgstr "OFİS"
+
+#: .\templates\base.html:117
+msgid "COMPANY LINK"
+msgstr "ŞİRKET LİNKLERİ"
+
+#: .\templates\base.html:127
+msgid "CONTACT"
+msgstr "İLETİŞİM"
+
+#: .\templates\base.html:159
+msgid "All Rights Reserved"
+msgstr "Tüm Hakları Saklıdır"
+
+#: .\templates\home\index.html:51
+msgid "Leading Sourcing And Consultancy Firm For The Inflight Catering Sector"
+msgstr "Uçak İçi Catering Sektöründe Lider Tedarik ve Danışmanlık Firması"
+
+#: .\templates\home\index.html:57
+msgid ""
+"With Years Of Experience And In-Depth Industry Knowledge, We Are Dedicated "
+"To Assisting Airlines, Catering Companies, And Inflight Service Providers In "
+"Optimizing Their Procurement Processes, Enhancing Operational Efficiency, "
+"And Delivering Exceptional Inflight Dining Experiences."
+msgstr "Yıllarca süren deneyim ve derinlemesine sektör bilgisi ile havayolu şirketlerine, catering şirketlerine ve uçak içi hizmet sağlayıcılarına tedarik süreçlerini optimize etme, operasyonel verimliliği artırma ve olağanüstü uçak içi yemek deneyimleri sunma konularında yardımcı olmaya kendimizi adadık."
+
+#: .\templates\home\index.html:75
+msgid "Learn More"
+msgstr "Daha Fazla Bilgi"
+
+#: .\templates\home\index.html:87
+msgid "Our Competitive Advantages"
+msgstr "Rekabet Avantajlarımız"
+
+#: .\templates\home\index.html:113
+msgid "Our Solutions"
+msgstr "Çözümlerimiz"

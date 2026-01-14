@@ -1,0 +1,272 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AVANTI GLOBAL SRL{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Leading Sourcing And Consultancy Firm For Inflight Catering Sector{% endblock %}">
+    
+    <!-- Favicon -->
+    {% if contact_info and contact_info.logo %}
+    <link rel="icon" href="{{ contact_info.logo.url }}">
+    {% else %}
+    <link rel="icon" href="{% static 'img/logo.png' %}">
+    {% endif %}
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <!-- Owl Carousel CSS -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home:index' %}">
+                {% if contact_info and contact_info.logo %}
+                <img src="{{ contact_info.logo.url }}" alt="{{ contact_info.company_name }}" style="height: 50px;">
+                {% else %}
+                <img src="{% static 'img/logo.png' %}" alt="AVANTI GLOBAL" style="height: 50px;">
+                {% endif %}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:index' %}">{% trans "Home" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'services:list' %}">{% trans "Services" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'products:list' %}">{% trans "Product List" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about:index' %}">{% trans "About" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'contact:index' %}">{% trans "Contact Us" %}</a>
+                    </li>
+                </ul>
+                
+                <!-- Language Switcher -->
+                <div class="ms-3">
+                    <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
+                            {% get_current_language as LANGUAGE_CODE %}
+                            {% get_available_languages as LANGUAGES %}
+                            {% for lang_code, lang_name in LANGUAGES %}
+                                <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
+                                    {{ lang_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">{% trans "OFFICE" %}</h5>
+                    {% if contact_info %}
+                        <p class="mb-1"><strong>{{ contact_info.company_name }}</strong></p>
+                        <p class="small">
+                            {{ contact_info.address }}<br>
+                            {% if contact_info.sector %}{{ contact_info.sector }}, {% endif %}{{ contact_info.city }}<br>
+                            {{ contact_info.country }}
+                        </p>
+                    {% else %}
+                        <p class="mb-1"><strong>AVANTI GLOBAL SRL</strong></p>
+                        <p class="small">
+                            Strada Azurului, Nr. 5, Parter, Camera 1,<br>
+                            Bloc 118a, Scara 1, Ap. 6;<br>
+                            București Sectorul 6, Romania
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">{% trans "COMPANY LINK" %}</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'home:index' %}" class="text-white-50">{% trans "Home" %}</a></li>
+                        <li><a href="{% url 'services:list' %}" class="text-white-50">{% trans "Services" %}</a></li>
+                        <li><a href="{% url 'products:list' %}" class="text-white-50">{% trans "Product List" %}</a></li>
+                        <li><a href="{% url 'about:index' %}" class="text-white-50">{% trans "About" %}</a></li>
+                        <li><a href="{% url 'contact:index' %}" class="text-white-50">{% trans "Contact Us" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">{% trans "CONTACT" %}</h5>
+                    {% if contact_info %}
+                        <p class="small mb-1">
+                            <i class="fas fa-envelope me-2"></i> {{ contact_info.email }}
+                        </p>
+                        <p class="small mb-3">
+                            <i class="fas fa-phone me-2"></i> {{ contact_info.phone }}
+                        </p>
+                        <div class="social-links">
+                            {% if contact_info.facebook %}<a href="{{ contact_info.facebook }}" class="text-white me-3" target="_blank"><i class="fab fa-facebook"></i></a>{% endif %}
+                            {% if contact_info.twitter %}<a href="{{ contact_info.twitter }}" class="text-white me-3" target="_blank"><i class="fab fa-twitter"></i></a>{% endif %}
+                            {% if contact_info.instagram %}<a href="{{ contact_info.instagram }}" class="text-white me-3" target="_blank"><i class="fab fa-instagram"></i></a>{% endif %}
+                            {% if contact_info.linkedin %}<a href="{{ contact_info.linkedin }}" class="text-white me-3" target="_blank"><i class="fab fa-linkedin"></i></a>{% endif %}
+                            {% if contact_info.youtube %}<a href="{{ contact_info.youtube }}" class="text-white" target="_blank"><i class="fab fa-youtube"></i></a>{% endif %}
+                        </div>
+                    {% else %}
+                        <p class="small mb-1">
+                            <i class="fas fa-envelope me-2"></i> office@avantiglobal.ro
+                        </p>
+                        <p class="small mb-3">
+                            <i class="fas fa-phone me-2"></i> +40 (72) 528 32 33
+                        </p>
+                        <div class="social-links">
+                            <a href="https://facebook.com/" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="https://twitter.com/" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.instagram.com/" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="bg-white">
+            <div class="text-center">
+                <p class="mb-0 small">&copy; {% now "Y" %} Avanti, {% trans "All Rights Reserved" %}</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    <script>
+        // Owl Carousel Initialization
+        $(document).ready(function(){
+            $(".why-choose-carousel").owlCarousel({
+                autoplay: true,
+                smartSpeed: 1000,
+                margin: 25,
+                loop: true,
+                center: false,
+                dots: false,
+                nav: true,
+                navText: [
+                    '<i class="bi bi-chevron-left" style="font-size: 2rem;"></i>',
+                    '<i class="bi bi-chevron-right" style="font-size: 2rem;"></i>'
+                ],
+                responsive: {
+                    0:{
+                        items:1
+                    },
+                    576:{
+                        items:2
+                    },
+                    768:{
+                        items:3
+                    },
+                    992:{
+                        items:4
+                    }
+                }
+            });
+            
+            // Service Carousel - Initialize each separately
+            $(".service-carousel").each(function(index){
+                var carousel = $(this);
+                carousel.owlCarousel({
+                    autoplay: true,
+                    smartSpeed: 1000,
+                    margin: 45,
+                    dots: false,
+                    loop: false,
+                    nav: true,
+                    navText: [
+                        '<i class="bi bi-arrow-left"></i>',
+                        '<i class="bi bi-arrow-right"></i>'
+                    ],
+                    responsive: {
+                        0:{
+                            items:1
+                        },
+                        992:{
+                            items:2
+                        },
+                        1200:{
+                            items:3
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    
+    <style>
+        .why-choose-carousel {
+            position: relative;
+        }
+        
+        .why-choose-carousel .owl-nav {
+            position: absolute;
+            padding: 0 45px;
+            width: 100%;
+            height: 45px;
+            top: calc(50% - 22.5px);
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        
+        .why-choose-carousel .owl-nav .owl-prev,
+        .why-choose-carousel .owl-nav .owl-next {
+            position: relative;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            background: #13C5DD;
+            border-radius: 45px;
+            font-size: 22px;
+            transition: .5s;
+            pointer-events: all;
+        }
+        
+        .why-choose-carousel .owl-nav .owl-prev:hover,
+        .why-choose-carousel .owl-nav .owl-next:hover {
+            background: #0ea5bd;
+        }
+    </style>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

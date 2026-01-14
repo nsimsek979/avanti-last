@@ -1,0 +1,378 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - AVANTI GLOBAL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .stat-card {
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .table-responsive {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .flag-emoji {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-bar-chart-line me-2"></i>AVANTI Analytics
+            </a>
+            <div class="ms-auto">
+                <a href="/admin/" class="btn btn-outline-light">
+                    <i class="bi bi-gear me-1"></i>Admin Panel
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <!-- Period Selector -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="btn-group" role="group">
+                    <a href="?period=7" class="btn {% if current_period == 7 %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        Last 7 Days
+                    </a>
+                    <a href="?period=30" class="btn {% if current_period == 30 %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        Last 30 Days
+                    </a>
+                    <a href="?period=90" class="btn {% if current_period == 90 %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        Last 90 Days
+                    </a>
+                    <a href="?period=365" class="btn {% if current_period == 365 %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        Last Year
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card bg-white p-4">
+                    <div class="stat-label">
+                        <i class="bi bi-people text-primary me-2"></i>Total Visitors ({{ current_period }}d)
+                    </div>
+                    <div class="stat-value text-primary">{{ current_stats.total_visitors|default:0 }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card bg-white p-4">
+                    <div class="stat-label">
+                        <i class="bi bi-eye text-success me-2"></i>Page Views ({{ current_period }}d)
+                    </div>
+                    <div class="stat-value text-success">{{ current_stats.total_page_views|default:0 }}</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card bg-white p-4">
+                    <div class="stat-label">
+                        <i class="bi bi-calendar-week text-info me-2"></i>Last 7 Days
+                    </div>
+                    <div class="stat-value text-info">{{ stats_7days.total_visitors|default:0 }}</div>
+                    <small class="text-muted">{{ stats_7days.total_page_views|default:0 }} views</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card bg-white p-4">
+                    <div class="stat-label">
+                        <i class="bi bi-calendar-month text-warning me-2"></i>Last 30 Days
+                    </div>
+                    <div class="stat-value text-warning">{{ stats_30days.total_visitors|default:0 }}</div>
+                    <small class="text-muted">{{ stats_30days.total_page_views|default:0 }} views</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <!-- Daily Visitors Chart -->
+            <div class="col-lg-8">
+                <div class="chart-container">
+                    <h5 class="mb-3">
+                        <i class="bi bi-graph-up me-2"></i>Daily Visitors (Last {{ current_period }} Days)
+                    </h5>
+                    <canvas id="dailyVisitorsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Hourly Distribution -->
+            <div class="col-lg-4">
+                <div class="chart-container">
+                    <h5 class="mb-3">
+                        <i class="bi bi-clock me-2"></i>Hourly Distribution (24h)
+                    </h5>
+                    <canvas id="hourlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <!-- Countries Chart -->
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="mb-3">
+                        <i class="bi bi-globe me-2"></i>Visitors by Country
+                    </h5>
+                    <canvas id="countriesChart"></canvas>
+                    
+                    <div class="mt-4">
+                        <h6>Top Countries:</h6>
+                        <div class="list-group">
+                            {% for country_data in current_stats.by_country|slice:":5" %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    {% if country_data.country_code %}
+                                        <span class="flag-emoji me-2">{{ country_data.country_code|lower|default:"🌍" }}</span>
+                                    {% endif %}
+                                    {{ country_data.country|default:"Unknown" }}
+                                </span>
+                                <span class="badge bg-primary rounded-pill">
+                                    {{ country_data.count }} visitor{{ country_data.count|pluralize }}
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Pages -->
+            <div class="col-lg-6">
+                <div class="table-responsive">
+                    <h5 class="mb-3">
+                        <i class="bi bi-file-earmark-text me-2"></i>Top Pages
+                    </h5>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Page</th>
+                                <th class="text-end">Views</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for page in top_pages %}
+                            <tr>
+                                <td>
+                                    <div>
+                                        <strong>{{ page.title|default:"Untitled" }}</strong>
+                                    </div>
+                                    <small class="text-muted">{{ page.url }}</small>
+                                </td>
+                                <td class="text-end">
+                                    <span class="badge bg-success">{{ page.views }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">No data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Visitors -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <h5 class="mb-3">
+                        <i class="bi bi-person-lines-fill me-2"></i>Recent Visitors
+                    </h5>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>IP Address</th>
+                                <th>Country</th>
+                                <th>City</th>
+                                <th>First Visit</th>
+                                <th>Last Visit</th>
+                                <th class="text-end">Page Views</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for visitor in recent_visitors %}
+                            <tr>
+                                <td>
+                                    <code>{{ visitor.ip_address }}</code>
+                                </td>
+                                <td>
+                                    {% if visitor.country_code %}
+                                        <span class="flag-emoji me-1">{{ visitor.country_code|lower }}</span>
+                                    {% endif %}
+                                    {{ visitor.country|default:"Unknown" }}
+                                </td>
+                                <td>{{ visitor.city|default:"-" }}</td>
+                                <td>{{ visitor.first_visit|date:"Y-m-d H:i" }}</td>
+                                <td>{{ visitor.last_visit|date:"Y-m-d H:i" }}</td>
+                                <td class="text-end">
+                                    <span class="badge bg-info">{{ visitor.page_views }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No visitors yet</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Daily Visitors Chart
+        const dailyData = {{ by_date_json|safe }};
+        const dailyLabels = dailyData.map(d => d.date);
+        const dailyValues = dailyData.map(d => d.count);
+        
+        new Chart(document.getElementById('dailyVisitorsChart'), {
+            type: 'line',
+            data: {
+                labels: dailyLabels,
+                datasets: [{
+                    label: 'Visitors',
+                    data: dailyValues,
+                    borderColor: 'rgb(13, 110, 253)',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Hourly Distribution Chart
+        const hourlyData = {{ hourly_data_json|safe }};
+        const hourlyLabels = Object.keys(hourlyData);
+        const hourlyValues = Object.values(hourlyData);
+        
+        new Chart(document.getElementById('hourlyChart'), {
+            type: 'bar',
+            data: {
+                labels: hourlyLabels,
+                datasets: [{
+                    label: 'Visitors',
+                    data: hourlyValues,
+                    backgroundColor: 'rgba(13, 202, 240, 0.5)',
+                    borderColor: 'rgb(13, 202, 240)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Countries Chart
+        const countriesData = {{ by_country_json|safe }};
+        const countryLabels = countriesData.map(d => d.country || 'Unknown');
+        const countryValues = countriesData.map(d => d.count);
+        
+        new Chart(document.getElementById('countriesChart'), {
+            type: 'doughnut',
+            data: {
+                labels: countryLabels,
+                datasets: [{
+                    data: countryValues,
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.8)',
+                        'rgba(25, 135, 84, 0.8)',
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(220, 53, 69, 0.8)',
+                        'rgba(13, 202, 240, 0.8)',
+                        'rgba(111, 66, 193, 0.8)',
+                        'rgba(253, 126, 20, 0.8)',
+                        'rgba(214, 51, 132, 0.8)',
+                        'rgba(32, 201, 151, 0.8)',
+                        'rgba(102, 16, 242, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
